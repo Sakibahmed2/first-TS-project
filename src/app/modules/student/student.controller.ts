@@ -1,19 +1,39 @@
 import { Request, Response } from 'express';
 import { StudentService } from './student.service';
+import studentValidationSchema from './student.validation';
 
 const createStudent = async (req: Request, res: Response) => {
   try {
-    const student = req.body;
+    // creating a student validation using Joi
+    const { student: studentData } = req.body;
 
-    const result = await StudentService.createStudentIntoDB(student);
+    // data validation using Joi
+    // const { error, value } = studentValidationSchema.validate(studentData);
+
+    // data validation using Zod
+    const zodParsedData = studentValidationSchema.parse(studentData);
+
+    const result = await StudentService.createStudentIntoDB(zodParsedData);
+
+    // if (error) {
+    //   res.status(200).json({
+    //     success: false,
+    //     message: 'something went wrong',
+    //     error: error.details,
+    //   });
+    // }
 
     res.status(200).json({
       success: true,
-      message: 'Student was created',
+      message: 'Student is created successfully',
       data: result,
     });
-  } catch (error) {
-    console.log(error);
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || 'something went wrong',
+      error: err,
+    });
   }
 };
 
