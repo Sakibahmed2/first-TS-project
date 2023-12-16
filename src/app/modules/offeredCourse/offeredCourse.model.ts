@@ -5,32 +5,32 @@ import { Days } from './offeredCourse.constant';
 const offeredCourseSchema = new Schema<TOfferedCourse>(
   {
     semesterRegistration: {
-      type: Schema.ObjectId,
+      type: Schema.Types.ObjectId,
       required: true,
       ref: 'SemesterRegistration',
     },
     academicSemester: {
-      type: Schema.ObjectId,
+      type: Schema.Types.ObjectId,
       required: true,
       ref: 'AcademicSemester',
     },
     academicFaculty: {
-      type: Schema.ObjectId,
+      type: Schema.Types.ObjectId,
       required: true,
       ref: 'AcademicFaculty',
     },
     academicDepartment: {
-      type: Schema.ObjectId,
+      type: Schema.Types.ObjectId,
       required: true,
       ref: 'AcademicDepartment',
     },
     course: {
-      type: Schema.ObjectId,
+      type: Schema.Types.ObjectId,
       required: true,
       ref: 'Course',
     },
     faculty: {
-      type: Schema.ObjectId,
+      type: Schema.Types.ObjectId,
       required: true,
       ref: 'Faculty',
     },
@@ -42,10 +42,12 @@ const offeredCourseSchema = new Schema<TOfferedCourse>(
       type: Number,
       required: true,
     },
-    days: {
-      required: true,
-      enum: Days,
-    },
+    days: [
+      {
+        type: String,
+        enum: Days,
+      },
+    ],
     startTime: {
       type: String,
       required: true,
@@ -55,7 +57,9 @@ const offeredCourseSchema = new Schema<TOfferedCourse>(
       required: true,
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+  },
 );
 
 export const OfferedCourse = model<TOfferedCourse>(
